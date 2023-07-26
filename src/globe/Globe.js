@@ -92,24 +92,23 @@ define([
              * This globe's equatorial radius in meters.
              *
              * @type {Number}
-             * @default WGS 84 semi-major axis (6378137.0 meters)
+             * @default IAU 2000 Lunar Radius (1737400.0 meters).
              */
-            this.equatorialRadius = WorldWind.WGS84_SEMI_MAJOR_AXIS;
-            var f = 1 / WorldWind.WGS84_INVERSE_FLATTENING;
+            this.equatorialRadius = WorldWind.MOON_RADIUS;
 
             /**
              * This globe's polar radius in meters.
              * @type {Number}
-             * @default WGS 84 semi-minor axis (6356752.3142 meters). Taken from NGA.STND.0036_1.0.0_WGS84, section 3.2.
+             * @default IAU 2000 assumes a perfect sphere. Therefore polar radius is the same as the equatorial radius.
              */
-            this.polarRadius = this.equatorialRadius * (1 - f);
+            this.polarRadius = this.equatorialRadius;
 
             /**
              * This globe's eccentricity squared.
              * @type {Number}
-             * @default WGS 84 first eccentricity squared (6.694379990141e-3). Taken from NGA.STND.0036_1.0.0_WGS84, section 3.3.
+             * @default IAU 2000 assumes a perfect sphere. There is no eccentricity.
              */
-            this.eccentricitySquared = (2 * f) - (f * f);
+            this.eccentricitySquared = 0.0;
 
             /**
              * The tessellator used to create this globe's terrain.

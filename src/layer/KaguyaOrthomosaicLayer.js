@@ -26,45 +26,41 @@
  * PDF found in code  directory.
  */
 /**
- * @exports LookAtNavigator
+ * @exports KaguyaOrthomosaicLayer
  */
 define([
         '../geom/Location',
-        '../navigate/Navigator',
+        '../geom/Sector',
+        '../layer/TiledImageLayer',
+        '../util/WmsUrlBuilder'
     ],
     function (Location,
-              Navigator) {
+              Sector,
+              TiledImageLayer,
+              WmsUrlBuilder) {
         "use strict";
 
         /**
-         * Constructs a look-at navigator.
-         * @alias LookAtNavigator
+         * Constructs a Kaguya Terrain Camera Orthomosaic image layer.
+         * @alias KaguyaOrthomosaicLayer
          * @constructor
-         * @augments Navigator
-         * @classdesc Represents a navigator containing the required variables to enable the user to pan, zoom and tilt
-         * the globe.
+         * @augments TiledImageLayer
+         * @classdesc Displays a Kaguya Terrain Camera Orthomosaic image layer that spans the entire globe.
          */
-        var LookAtNavigator = function () {
-            Navigator.call(this);
+        var KaguyaOrthomosaicLayer = function () {
+            // TODO: Understand the comment below and adapt it to Kaguya's data properties.
+            // This LevelSet configuration captures the Landsat resolution of 1.38889E-04 degrees/pixel
+            TiledImageLayer.call(this,
+                Sector.FULL_SPHERE, new Location(45, 45), 12, "image/jpeg", "BMNGLandsat256", 256, 256);
 
-            /**
-             * The geographic location at the center of the viewport.
-             * @type {Location}
-             */
-            this.lookAtLocation = new Location(30, -110);
+            this.displayName = "Kaguya Terrain Camera Orthomosaic";
+            this.pickEnabled = false;
 
-            /**
-             * The distance from this navigator's eye point to its look-at location.
-             * @type {Number}
-             * @default 10,000 kilometers
-             */
-            this.range = 3e6; // TODO: Compute initial range to fit globe in viewport.
-
-            // Development testing only. Set this to false to suppress default navigator limits on 2D globes.
-            this.enable2DLimits = true;
+            this.urlBuilder = new WmsUrlBuilder("https://planetarymaps.usgs.gov/cgi-bin/mapserv?map=/maps/earth/moon_simp_cyl.map",
+                "KaguyaTC_Ortho", "", "1.3.0");
         };
 
-        LookAtNavigator.prototype = Object.create(Navigator.prototype);
+        KaguyaOrthomosaicLayer.prototype = Object.create(TiledImageLayer.prototype);
 
-        return LookAtNavigator;
+        return KaguyaOrthomosaicLayer;
     });

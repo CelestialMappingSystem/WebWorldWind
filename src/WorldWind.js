@@ -104,6 +104,7 @@ define([ // PLEASE KEEP ALL THIS IN ALPHABETICAL ORDER BY MODULE NAME (not direc
         './util/ImageSource',
         './render/ImageTile',
         './util/Insets',
+        './layer/KaguyaOrthomosaicLayer',
         './formats/kml/KmlAbstractView',
         './formats/kml/util/KmlAttribute',
         './formats/kml/styles/KmlBalloonStyle',
@@ -185,13 +186,16 @@ define([ // PLEASE KEEP ALL THIS IN ALPHABETICAL ORDER BY MODULE NAME (not direc
         './geom/Line',
         './geom/Location',
         './util/Logger',
+        './layer/LOLAKaguyaShadedReliefLayer',
         './navigate/LookAtNavigator',
+        './layer/LROWACGlobalMosaicLayer',
         './geom/Matrix',
         './geom/MeasuredLocation',
         './util/measure/MeasurerUtils',
         './cache/MemoryCache',
         './cache/MemoryCacheListener',
         './layer/MercatorTiledImageLayer',
+        './globe/MoonElevationModel',
         './navigate/Navigator',
         './util/NominatimGeocoder',
         './error/NotYetImplementedError',
@@ -382,6 +386,7 @@ define([ // PLEASE KEEP ALL THIS IN ALPHABETICAL ORDER BY MODULE NAME (not direc
               ImageSource,
               ImageTile,
               Insets,
+              KaguyaOrthomosaicLayer,
               KmlAbstractView,
               KmlAttribute,
               KmlBalloonStyle,
@@ -463,13 +468,16 @@ define([ // PLEASE KEEP ALL THIS IN ALPHABETICAL ORDER BY MODULE NAME (not direc
               Line,
               Location,
               Logger,
+              LOLAKaguyaShadedReliefLayer,
               LookAtNavigator,
+              LROWACGlobalMosaicLayer,
               Matrix,
               MeasuredLocation,
               MeasurerUtils,
               MemoryCache,
               MemoryCacheListener,
               MercatorTiledImageLayer,
+              MoonElevationModel,
               Navigator,
               NominatimGeocoder,
               NotYetImplementedError,
@@ -695,6 +703,15 @@ define([ // PLEASE KEEP ALL THIS IN ALPHABETICAL ORDER BY MODULE NAME (not direc
             LINEAR: "linear",
 
             /**
+             * IAU and IAG 2000 reference value for Moon's radius: 1737400.0 meters. Taken from
+             * https://lunar.gsfc.nasa.gov/library/LunCoordWhitePaper-10-08.pdf, section 5.1.
+             * Note that this standard assumes a perfect sphere and future selenodesics may 
+             * describe a biaxial or triaxial ellipsoid.
+             * @constant
+             */
+            MOON_RADIUS: 1737400.0,
+
+            /**
              * Indicates a multi-point shape, typically within a shapefile.
              */
             MULTI_POINT: "multiPoint",
@@ -897,6 +914,7 @@ define([ // PLEASE KEEP ALL THIS IN ALPHABETICAL ORDER BY MODULE NAME (not direc
         WorldWind['ImageSource'] = ImageSource;
         WorldWind['ImageTile'] = ImageTile;
         WorldWind['Insets'] = Insets;
+        WorldWind['KaguyaOrthomosaicLayer'] = KaguyaOrthomosaicLayer;
         WorldWind['KmlAbstractView'] = KmlAbstractView;
         WorldWind['KmlAttribute'] = KmlAttribute;
         WorldWind['KmlBalloonStyle'] = KmlBalloonStyle;
@@ -978,13 +996,16 @@ define([ // PLEASE KEEP ALL THIS IN ALPHABETICAL ORDER BY MODULE NAME (not direc
         WorldWind['Line'] = Line;
         WorldWind['Location'] = Location;
         WorldWind['Logger'] = Logger;
+        WorldWind['LOLAKaguyaShadedReliefLayer'] = LOLAKaguyaShadedReliefLayer;
         WorldWind['LookAtNavigator'] = LookAtNavigator;
+        WorldWind['LROWACGlobalMosaicLayer'] = LROWACGlobalMosaicLayer;
         WorldWind['Matrix'] = Matrix;
         WorldWind['MeasuredLocation'] = MeasuredLocation;
         WorldWind['MeasurerUtils'] = MeasurerUtils;
         WorldWind['MemoryCache'] = MemoryCache;
         WorldWind['MemoryCacheListener'] = MemoryCacheListener;
         WorldWind['MercatorTiledImageLayer'] = MercatorTiledImageLayer;
+        WorldWind['MoonElevationModel'] = MoonElevationModel;
         WorldWind['Navigator'] = Navigator;
         WorldWind['NominatimGeocoder'] = NominatimGeocoder;
         WorldWind['NotYetImplementedError'] = NotYetImplementedError;

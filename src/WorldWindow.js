@@ -33,6 +33,7 @@ define([
         './BasicWorldWindowController',
         './render/DrawContext',
         './globe/EarthElevationModel',
+        './globe/MoonElevationModel',
         './util/FrameStatistics',
         './geom/Frustum',
         './globe/Globe',
@@ -58,6 +59,7 @@ define([
               BasicWorldWindowController,
               DrawContext,
               EarthElevationModel,
+              MoonElevationModel,
               FrameStatistics,
               Frustum,
               Globe,
@@ -162,6 +164,7 @@ define([
              */
             this.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
+            // TODO: Switch to MoonElevationModel when it works.
             /**
              * The globe displayed.
              * @type {Globe}

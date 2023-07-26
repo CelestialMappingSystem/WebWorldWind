@@ -43,14 +43,10 @@ requirejs(['./WorldWindShim',
         // Create and add layers to the WorldWindow.
         var layers = [
             // Imagery layers.
-            {layer: new WorldWind.BMNGLayer(), enabled: true},
-            {layer: new WorldWind.BMNGLandsatLayer(), enabled: false},
-            {layer: new WorldWind.BingAerialLayer(null), enabled: false},
-            {layer: new WorldWind.BingAerialWithLabelsLayer(null), enabled: true},
-            {layer: new WorldWind.BingRoadsLayer(null), enabled: false},
-            {layer: new WorldWind.OpenStreetMapImageLayer(null), enabled: false},
-            // Add atmosphere layer on top of all base layers.
-            {layer: new WorldWind.AtmosphereLayer(), enabled: true},
+            {layer: new WorldWind.LROWACGlobalMosaicLayer(), enabled: true},
+            {layer: new WorldWind.KaguyaOrthomosaicLayer(), enabled: false},
+            {layer: new WorldWind.LOLAKaguyaShadedReliefLayer(), enabled: false},
+            {layer: new WorldWind.StarFieldLayer(), enabled: true},
             // WorldWindow UI layers.
             {layer: new WorldWind.CompassLayer(), enabled: true},
             {layer: new WorldWind.CoordinatesDisplayLayer(wwd), enabled: true},

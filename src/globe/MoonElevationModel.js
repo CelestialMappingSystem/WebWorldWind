@@ -26,45 +26,39 @@
  * PDF found in code  directory.
  */
 /**
- * @exports LookAtNavigator
+ * @exports MoonElevationModel
  */
 define([
+        '../globe/ElevationModel',
         '../geom/Location',
-        '../navigate/Navigator',
+        '../geom/Sector',
+        '../util/WmsUrlBuilder'
     ],
-    function (Location,
-              Navigator) {
-        "use strict";
+    function (ElevationModel,
+              Location,
+              Sector,
+              WmsUrlBuilder) {
+        //"use strict";
 
         /**
-         * Constructs a look-at navigator.
-         * @alias LookAtNavigator
+         * Constructs an MoonElevationModel consisting of three elevation coverages GEBCO, Aster V2, and USGS NED.
+         * @alias MoonElevationModel
          * @constructor
-         * @augments Navigator
-         * @classdesc Represents a navigator containing the required variables to enable the user to pan, zoom and tilt
-         * the globe.
          */
-        var LookAtNavigator = function () {
-            Navigator.call(this);
+        var MoonElevationModel = function () {
+            ElevationModel.call(this, Sector.FULL_SPHERE, new Location(45, 45), 12, "application/bill16", "tiles_test", 256, 256);
 
-            /**
-             * The geographic location at the center of the viewport.
-             * @type {Location}
-             */
-            this.lookAtLocation = new Location(30, -110);
-
-            /**
-             * The distance from this navigator's eye point to its look-at location.
-             * @type {Number}
-             * @default 10,000 kilometers
-             */
-            this.range = 3e6; // TODO: Compute initial range to fit globe in viewport.
-
-            // Development testing only. Set this to false to suppress default navigator limits on 2D globes.
-            this.enable2DLimits = true;
+            // TODO: Validate minimum and maximum lunar elevations and provide authoritative source.
+            this.displayName = "LRO Elevation Model";
+            this.minElevation = -9115; // Moon deepest point in meters
+            this.maxElevation = 10786; // Moon higher point in meters
+            this.pixelIsPoint = false; // WorldWind WMS elevation layers return pixel-as-area images
+            this.urlBuilder = new WmsUrlBuilder(
+                "https://celestial.arc.nasa.gov/cgi-bin/mapserv?map=/data/elev/lro.map",
+                "lro_elevations_layer", "", "1.3.0");
         };
 
-        LookAtNavigator.prototype = Object.create(Navigator.prototype);
+        MoonElevationModel.prototype = Object.create(ElevationModel.prototype);
 
-        return LookAtNavigator;
+        return MoonElevationModel;
     });
