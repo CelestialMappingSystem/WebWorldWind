@@ -134,4 +134,5 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-zip');
 
     grunt.registerTask('default', ['clean', 'karma', 'jsdoc', 'requirejs', 'copy', 'zip']);
+    grunt.registerTask('skip-karma', ['clean', 'jsdoc', 'requirejs', 'copy', 'zip']);
 };

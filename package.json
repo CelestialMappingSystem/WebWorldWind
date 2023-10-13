@@ -18,6 +18,7 @@
   },
   "scripts": {
     "build": "grunt",
+    "build-no-test": "grunt skip-karma",
     "clean": "grunt clean",
     "doc": "grunt jsdoc",
     "prepare": "npm run build",
