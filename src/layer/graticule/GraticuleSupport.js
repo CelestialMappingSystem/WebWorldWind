@@ -30,11 +30,11 @@
  */
 define([
     './GraticuleRenderingParams',
-    '../shapes/ShapeAttributes',
-    '../shapes/Path',
-    '../shapes/GeographicText',
-    '../shapes/TextAttributes',
-    '../util/Color'
+    '../../shapes/ShapeAttributes',
+    '../../shapes/Path',
+    '../../shapes/GeographicText',
+    '../../shapes/TextAttributes',
+    '../../util/Color'
 ],
 function (GraticuleRenderingParams,
           ShapeAttributes,

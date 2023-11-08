@@ -29,8 +29,8 @@
  * @exports GraticuleRenderingParams
  */
 define([
-        '../util/Color',
-        '../util/Font'
+        '../../util/Color',
+        '../../util/Font'
     ],
     function (Color) {
         "use strict";
@@ -53,7 +53,7 @@ define([
              * The color of the graticule lines.
              * @type {Color}
             */
-           this.lineColor = Color.WHITE;
+            this.lineColor = Color.WHITE;
            
             /**
              * The width of the graticule lines.
