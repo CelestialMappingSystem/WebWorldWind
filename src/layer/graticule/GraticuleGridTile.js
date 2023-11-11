@@ -204,5 +204,35 @@ function (Sector,
         path.pathType = pathType;
     };
 
+    // Internal.
+    GraticuleGridTile.prototype.computeLabelOffset = function(dc) {
+        return dc.eyePosition;
+    };
+
+    // Internal.
+    GraticuleGridTile.prototype.subdivideSector = function() {
+        let dLat = this.sector.deltaLatitude();
+        let dLon = this.sector.deltaLongitude();
+
+        let minLat = this.sector.minLatitude;
+        let minLon = this.sector.minLongitude;
+
+        let sectors = [];
+        let idx = 0;
+
+        for (let row = 0; row < this.divisions; row++) {
+            for (let col = 0; col < this.divisions; col++) {
+                sectors[idx++] = new Sector(
+                    minLat + dLat * row,
+                    minLat + dLat * row + dLat,
+                    minLon + dLon * col,
+                    minLon + dLon * col + dLon
+                );
+            }
+        }
+
+        return sectors;
+    };
+
     return GraticuleGridTile;
 });
