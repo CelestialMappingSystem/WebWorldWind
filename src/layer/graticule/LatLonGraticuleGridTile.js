@@ -74,11 +74,7 @@ function (GraticuleGridTile,
 
     LatLonGraticuleGridTile.prototype = Object.create(GraticuleGridTile.prototype);
 
-    /**
-     * Tests if the tile is in view for the given draw context.
-     * @param {DrawContext} dc The current draw context.
-     * @returns {Boolean} Is in view.
-     */
+    // Documented by superclass.
     LatLonGraticuleGridTile.prototype.isInView = function(dc) {
         if (!GraticuleGridTile.prototype.isInView.call(this, dc)) return false;
 
@@ -87,18 +83,14 @@ function (GraticuleGridTile,
         return true;
     };
 
-    /**
-     * Selects the renderables to draw for the current draw context.
-     * @param {DrawContext} dc The current draw context.
-     * @returns {Array<>} The list of selected renderables (renderable object, level)
-     * and the list of created labels (value, label type, level, delta latitude, offset)
-     */
+    // Documented by superclass.
     LatLonGraticuleGridTile.prototype.selectRenderables = function(dc) {
         if (!this.gridElements) {
             this.createRenderables();
         }
 
-        let selectedRenderables = [];
+        let selectedPathRenderables = [];
+        let selectedTextRenderables = [];
         let createdLabels = [];
 
         let labelOffset = this.computeLabelOffset(dc);
@@ -112,7 +104,7 @@ function (GraticuleGridTile,
                     ge.type == GridElement.typeLineSouth || 
                     ge.type == GridElement.typeLineNorth || 
                     ge.type == GridElement.typeLineWest)) {
-                    selectedRenderables.push([ge.renderable, graticuleLevel]);
+                    selectedPathRenderables.push([ge.renderable, graticuleLevel]);
 
                     let labelType = (ge.type == GridElement.typeLineNorth || ge.type == GridElement.typeLineSouth) ?
                         GridElement.typeLatitudeLabel : GridElement.typeLongitudeLabel;
@@ -128,7 +120,11 @@ function (GraticuleGridTile,
 
         for (let ge of this.gridElements) {
             if (ge.isInView(dc) && ge.type == GridElement.typeLine) {
-                selectedRenderables.push([ge.renderable, graticuleLevel]);
+                if (ge.isLine()) {
+                    selectedPathRenderables.push([ge.renderable, graticuleLevel]);
+                } else if (ge.isText()) {
+                    selectedTextRenderables.push([ge.renderable, graticuleLevel]);
+                }
 
                 let labelType = ge.sector.deltaLatitude() == 0 ?
                     GridElement.typeLatitudeLabel : GridElement.typeLongitudeLabel;
@@ -146,12 +142,10 @@ function (GraticuleGridTile,
             else gt.clearRenderables();
         }
 
-        return [selectedRenderables, createdLabels];
+        return [selectedPathRenderables, selectedTextRenderables, createdLabels];
     };
 
-    /**
-     * Creates the subtiles of this tile.
-     */
+    // Documented by superclass.
     LatLonGraticuleGridTile.prototype.createSubTiles = function() {
         this.subTiles = [];
         let sectors = this.subdivideSector();

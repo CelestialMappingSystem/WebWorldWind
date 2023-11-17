@@ -197,6 +197,25 @@ function (Sector,
         }
     };
 
+    /**
+     * Selects the renderables to draw for the current draw context.
+     * @param {DrawContext} dc The current draw context.
+     * @returns {Array<>} The list of selected path renderables (Path object, graticule level),
+     * the selected text renderables (GeographicText object, graticule level),
+     * and the list of created labels (value, label type, graticule level, delta latitude, offset)
+     */
+    GraticuleGridTile.prototype.selectRenderables = function(dc) {
+        // Implemented by subclasses.
+        return [];
+    };
+
+    /**
+     * Creates the subtiles of this tile.
+     */
+    GraticuleGridTile.prototype.createSubTiles = function() {
+        // Implemented by subclasses.
+    }
+
     // Internal.
     GraticuleGridTile.prototype.createLineRenderable = function(positions, pathType) {
         let path = new Path(positions);
