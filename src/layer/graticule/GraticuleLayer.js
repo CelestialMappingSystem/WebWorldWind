@@ -232,12 +232,15 @@ function (Layer,
     GraticuleLayer.prototype.doRender = function(dc) {
         // For now, not dealing with special updates to 2D continuous globes wrt timestamps
 
-        this.clear(dc);
-        this.selectRenderables(dc);
+        if (this.needsToUpdate(dc)) {
+            this.clear(dc);
+            this.selectRenderables(dc);
+        }
+        
         this.graticuleSupport.render(dc, this.opacity);
     };
 
-    GraticuleLayer.prototype.isLayerInView = function(dc) {
+    GraticuleLayer.prototype.needsToUpdate = function(dc) {
         if (!this.lastEyePoint) return true;
 
         let surfacePoint = dc.surfacePointForMode(this.lastEyePoint.latitude, this.lastEyePoint.longitude, 0, WorldWind.RELATIVE_TO_GROUND);
