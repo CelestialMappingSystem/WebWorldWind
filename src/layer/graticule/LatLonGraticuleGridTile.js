@@ -34,7 +34,7 @@ define([
     '../../geom/BoundingBox',
     '../../geom/Angle',
     '../../geom/Position',
-    '../../shapes/DrawContext',
+    '../../render/DrawContext',
     '../../shapes/Path',
     './GridElement'
 ],
@@ -100,7 +100,7 @@ function (GraticuleGridTile,
 
         if (this.level == 0) {
             for (let ge of this.gridElements) {
-                if (ge.isInView() && (
+                if (ge.isInView(dc) && (
                     ge.type == GridElement.typeLineSouth || 
                     ge.type == GridElement.typeLineNorth || 
                     ge.type == GridElement.typeLineWest)) {
@@ -111,7 +111,7 @@ function (GraticuleGridTile,
                     createdLabels.push([ge.value, labelType, graticuleLevel, this.sector.deltaLatitude(), labelOffset]);
                 }
             }
-            if (this.getSizeInPixels(dc) / this.divisions < this.minCellSizePixels) return;
+            if (this.getSizeInPixels(dc) / this.divisions < this.minCellSizePixels) return [selectedPathRenderables, selectedTextRenderables, createdLabels];
         }
 
         // Add tile grid elements
@@ -132,7 +132,7 @@ function (GraticuleGridTile,
             }
         }
 
-        if (this.getSizeInPixels(dc) / this.divisions < this.minCellSizePixels * 2) return;
+        if (this.getSizeInPixels(dc) / this.divisions < LatLonGraticuleGridTile.minCellSizePixels * 2) return [selectedPathRenderables, selectedTextRenderables, createdLabels];
 
         if (!this.subTiles) {
             this.createSubTiles();
@@ -156,7 +156,7 @@ function (GraticuleGridTile,
         }
 
         for (let s of sectors) {
-            this.subTiles.add(new LatLonGraticuleGridTile(
+            this.subTiles.push(new LatLonGraticuleGridTile(
                 s,
                 subdivisions,
                 this.level + 1

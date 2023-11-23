@@ -91,7 +91,7 @@ function (Layer,
          * The values of the current longitude labels.
          * @type {String}
          */
-        this.angleFormat = GraticuleLayer.dmsAngleFormat;
+        this.angleFormat = GraticuleLayer.ddAngleFormat;
 
         /**
          * The current globe.
@@ -194,7 +194,7 @@ function (Layer,
     GraticuleLayer.prototype.selectRenderables = function(dc) {
         let visibleTiles = this.getVisibleTiles(dc);
         for (let tile of visibleTiles) {
-            let [pathRenderables, textRenderables, createdLabels] = tile.selectRenderables();
+            let [pathRenderables, textRenderables, createdLabels] = tile.selectRenderables(dc);
 
             for (let [path, graticuleLevel] of pathRenderables) {
                 this.addPathRenderable(path, graticuleLevel);
@@ -216,15 +216,15 @@ function (Layer,
     }
 
     GraticuleLayer.prototype.addLabel = function(value, labelType, graticuleLevel, resolution, labelOffset) {
-        let angleLabel = this.makeAngleLabel(new Angle(value), resolution);
+        let angleLabel = this.makeAngleLabel(value, resolution);
         let text;
 
-        if (labelType == GridElement.typeLatitudeLabel && !this.latitudeLabels.contains(value)) {
+        if (labelType == GridElement.typeLatitudeLabel && !this.latitudeLabels.includes(value)) {
             this.latitudeLabels.push(value);
-            text = new GeographicText(angleLabel, new Vec3(value, labelOffset.longitude, 0));
-        } else if (labelType == GridElement.typeLongitudeLabel && !this.latitudeLabels.contains(value)) {
+            text = new GeographicText(new Vec3(value, labelOffset.longitude, 0), angleLabel);
+        } else if (labelType == GridElement.typeLongitudeLabel && !this.latitudeLabels.includes(value)) {
             this.longitudeLabels.push(value);
-            text = new GeographicText(angleLabel, new Vec3(labelOffset.latitude, value, 0));
+            text = new GeographicText(new Vec3(labelOffset.latitude, value, 0), angleLabel);
         }
 
         if (text) this.addTextRenderable(text, graticuleLevel);
@@ -234,28 +234,28 @@ function (Layer,
         switch (this.angleFormat) {
             case GraticuleLayer.dmsAngleFormat:
                 if (resolution >= 1)
-                    return angle.toDecimalDegreesString(0);
+                    return Angle.toDecimalDegreesString(angle);
 
-                return angle.doDMSString();
+                return Angle.toDMSString(angle);
             
             case GraticuleLayer.dmAngleFormat:
                 if (resolution >= 1)
-                    return angle.toDecimalDegreesString(0);
+                    return Angle.toDecimalDegreesString(angle);
 
-                return angle.toDMString();
+                return Angle.toDMString(angle);
 
             case GraticuleLayer.ddAngleFormat:
             default:
                 if (resolution >= 1)
-                    label = angle.toDecimalDegreesString(0);
+                    return Angle.toDecimalDegreesString(angle);
                 else if (resolution >= .1)
-                    label = angle.toDecimalDegreesString(1);
+                    return Angle.toDecimalDegreesString(angle);
                 else if (resolution >= .01)
-                    label = angle.toDecimalDegreesString(2);
+                    return Angle.toDecimalDegreesString(angle);
                 else if (resolution >= .001)
-                    label = angle.toDecimalDegreesString(3);
+                    return Angle.toDecimalDegreesString(angle);
                 else
-                    label = angle.toDecimalDegreesString(4);
+                    return Angle.toDecimalDegreesString(angle);
         };
     };
 
@@ -273,7 +273,8 @@ function (Layer,
     GraticuleLayer.prototype.needsToUpdate = function(dc) {
         if (!this.lastEyePoint) return true;
 
-        let surfacePoint = dc.surfacePointForMode(this.lastEyePoint.latitude, this.lastEyePoint.longitude, 0, WorldWind.RELATIVE_TO_GROUND);
+        let surfacePoint = new Vec3();
+        dc.surfacePointForMode(this.lastEyePoint.latitude, this.lastEyePoint.longitude, 0, WorldWind.RELATIVE_TO_GROUND, surfacePoint);
         let altitudeAboveGround = dc.eyePoint.distanceTo(surfacePoint);
         if (dc.eyePoint.distanceTo(this.lastEyePoint) > altitudeAboveGround / 100) return true;
 
@@ -282,6 +283,8 @@ function (Layer,
         if (Math.abs(this.lastHeading - dc.navigator.heading) > 1) return true;
 
         if (Math.abs(this.lastTilt - dc.navigator.tilt) > 1) return true;
+
+        // console.log(this.lastFOV, dc.navigator.fieldOfView);
 
         if (Math.abs(this.lastFOV - dc.navigator.fieldOfView) > 1) return true;
 

@@ -32,7 +32,8 @@ define([
         '../../util/Color',
         '../../util/Font'
     ],
-    function (Color) {
+    function (Color,
+              Font) {
         "use strict";
 
         /**

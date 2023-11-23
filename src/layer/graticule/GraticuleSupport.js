@@ -56,13 +56,13 @@ function (GraticuleRenderingParams,
          * The rendering params for each name.
          * @type {Map<String, GraticuleRenderingParams>}
          */
-        this._namedParams = Map();
+        this._namedParams = new Map();
         
         /**
          * The shape attributes for each name.
          * @type {Map<String, ShapeAttributes>}
         */
-        this._namedShapeAttributes = Map();
+        this._namedShapeAttributes = new Map();
 
         /**
          * The path renderables with associated param keys.
@@ -134,7 +134,7 @@ function (GraticuleRenderingParams,
      * @param {Number} opacity The opacity for the rendered objects, defaults to 1.
      */
     GraticuleSupport.prototype.render = function (drawContext, opacity) {
-        let opacity = opacity || 1;
+        opacity = opacity || 1;
 
         for (let {path, paramKey} of this._pathRenderables) {
             if (path == null || paramKey == null) continue;

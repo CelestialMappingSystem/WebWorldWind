@@ -33,8 +33,10 @@ define([
     '../../geom/BoundingBox',
     '../../geom/Angle',
     '../../geom/Position',
-    '../../shapes/DrawContext',
+    '../../render/DrawContext',
     '../../shapes/Path',
+    '../../geom/Vec3',
+    '../../geom/Location',
     './GridElement'
 ],
 function (Sector,
@@ -43,6 +45,8 @@ function (Sector,
           Position,
           DrawContext,
           Path,
+          Vec3,
+          Location,
           GridElement) {
     "use strict";
 
@@ -98,12 +102,9 @@ function (Sector,
         let extent = new BoundingBox();
         extent.setToSector(this.sector, dc.globe, minElv * dc.verticalExaggeration, maxElv * dc.verticalExaggeration);
 
-        let vs = dc.projectionLimits;
-        if (!vs) return false;
-
-        if (!this.sector.overlaps(vs)) return false;
-
         if (!extent.intersectsFrustum(dc.frustumInModelCoordinates)) return false;
+
+        if (dc.projectionLimits && !this.sector.overlaps(vs)) return false;
 
         return true;
     };
@@ -114,8 +115,10 @@ function (Sector,
      * @returns {Number} The pixel size.
      */
     GraticuleGridTile.prototype.getSizeInPixels = function(dc) {
-        let {latitude, longitude} = this.sector.centroid;
-        let centerPoint = dc.surfacePointForMode(latitude, longitude, 0);
+        let location = Location.ZERO;
+        this.sector.centroid(location);
+        let centerPoint = new Vec3();
+        dc.surfacePointForMode(location.latitude, location.longitude, 0, null, centerPoint);
 
         let distance = dc.eyePoint.distanceTo(centerPoint);
         let tileSizeMeter = this.sector.deltaLatitude() * Angle.DEGREES_TO_RADIANS;
@@ -128,10 +131,12 @@ function (Sector,
     GraticuleGridTile.prototype.clearRenderables = function() {
         this.gridElements = null;
 
-        for (let tile of this.subTiles) {
-            tile.clearRenderables();
+        if (this.subTiles) {
+            for (let tile of this.subTiles) {
+                tile.clearRenderables();
+            }
+            this.subTiles = null;
         }
-        this.subTiles = null;
     };
 
     /**

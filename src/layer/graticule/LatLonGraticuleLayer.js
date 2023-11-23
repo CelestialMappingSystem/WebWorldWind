@@ -56,6 +56,7 @@ function (GraticuleLayer,
         GraticuleLayer.call(this, "Lat-Lon Graticules");
 
         this.gridTiles = [];
+        for (let i=0; i < 18; i++) this.gridTiles.push([]);
 
         this.initRenderingParams();
     };
@@ -98,7 +99,8 @@ function (GraticuleLayer,
 
     LatLonGraticuleLayer.prototype.getVisibleTiles = function(dc) {
         let tileList = [];
-        let visibleSector = dc.globe.projectionLimits;
+        // let visibleSector = dc.globe.projectionLimits;
+        let visibleSector = Sector.FULL_SPHERE;
         if (visibleSector) {
             let gridRectangle = this.getGridRectangleForSector(visibleSector);
             for (let row = gridRectangle.y; row <= gridRectangle.y + gridRectangle.height; row++) {
@@ -140,7 +142,7 @@ function (GraticuleLayer,
     LatLonGraticuleLayer.prototype.getGridSector = function(row, col) {
         let minLat = -90 + row*10;
         let maxLat = minLat + 10;
-        let minLon = -180 * col*10;
+        let minLon = -180 + col*10;
         let maxLon = minLon + 10;
         return new Sector(minLat, maxLat, minLon, maxLon);
     };

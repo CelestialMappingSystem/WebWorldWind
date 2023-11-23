@@ -178,6 +178,7 @@ define([ // PLEASE KEEP ALL THIS IN ALPHABETICAL ORDER BY MODULE NAME (not direc
         './formats/kml/util/KmlViewVolume',
         './formats/kml/KmzFile',
         './layer/LandsatRestLayer',
+        './layer/graticule/LatLonGraticuleLayer',
         './layer/Layer',
         './util/measure/LengthMeasurer',
         './util/Level',
@@ -460,6 +461,7 @@ define([ // PLEASE KEEP ALL THIS IN ALPHABETICAL ORDER BY MODULE NAME (not direc
               KmlViewVolume,
               KmzFile,
               LandsatRestLayer,
+              LatLonGraticuleLayer,
               Layer,
               LengthMeasurer,
               Level,
@@ -988,6 +990,7 @@ define([ // PLEASE KEEP ALL THIS IN ALPHABETICAL ORDER BY MODULE NAME (not direc
         WorldWind['KmlViewVolume'] = KmlViewVolume;
         WorldWind['KmzFile'] = KmzFile;
         WorldWind['LandsatRestLayer'] = LandsatRestLayer;
+        WorldWind['LatLonGraticuleLayer'] = LatLonGraticuleLayer;
         WorldWind['Layer'] = Layer;
         WorldWind['LengthMeasurer'] = LengthMeasurer;
         WorldWind['Level'] = Level;

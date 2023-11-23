@@ -80,9 +80,7 @@ function (Sector,
     GridElement.prototype.isInView = function (dc, vs) {
         vs = vs || dc.globe.projectionLimits;
 
-        if (!vs) return false;
-
-        return this.sector.overlaps(vs);
+        return !vs || this.sector.overlaps(vs);
     };
 
     GridElement.typeLine = "GridElement_Line";
