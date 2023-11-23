@@ -210,6 +210,11 @@ function (Layer,
         }
     };
 
+    GraticuleLayer.prototype.getVisibleTiles = function(dc) {
+        // Implemented by subclasses.
+        return [];
+    }
+
     GraticuleLayer.prototype.addLabel = function(value, labelType, graticuleLevel, resolution, labelOffset) {
         let angleLabel = this.makeAngleLabel(new Angle(value), resolution);
         let text;
@@ -226,7 +231,32 @@ function (Layer,
     };
 
     GraticuleLayer.prototype.makeAngleLabel = function(angle, resolution) {
-        // TODO
+        switch (this.angleFormat) {
+            case GraticuleLayer.dmsAngleFormat:
+                if (resolution >= 1)
+                    return angle.toDecimalDegreesString(0);
+
+                return angle.doDMSString();
+            
+            case GraticuleLayer.dmAngleFormat:
+                if (resolution >= 1)
+                    return angle.toDecimalDegreesString(0);
+
+                return angle.toDMString();
+
+            case GraticuleLayer.ddAngleFormat:
+            default:
+                if (resolution >= 1)
+                    label = angle.toDecimalDegreesString(0);
+                else if (resolution >= .1)
+                    label = angle.toDecimalDegreesString(1);
+                else if (resolution >= .01)
+                    label = angle.toDecimalDegreesString(2);
+                else if (resolution >= .001)
+                    label = angle.toDecimalDegreesString(3);
+                else
+                    label = angle.toDecimalDegreesString(4);
+        };
     };
 
     GraticuleLayer.prototype.doRender = function(dc) {
