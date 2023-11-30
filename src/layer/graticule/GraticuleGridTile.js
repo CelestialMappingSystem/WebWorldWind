@@ -224,8 +224,10 @@ function (Sector,
     // Internal.
     GraticuleGridTile.prototype.createLineRenderable = function(positions, pathType) {
         let path = new Path(positions);
+        path.altitudeMode = WorldWind.CLAMP_TO_GROUND;
         path.followTerrain = true;
         path.pathType = pathType;
+        return path;
     };
 
     // Internal.

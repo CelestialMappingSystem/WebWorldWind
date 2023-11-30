@@ -111,7 +111,7 @@ function (GraticuleGridTile,
                     createdLabels.push([ge.value, labelType, graticuleLevel, this.sector.deltaLatitude(), labelOffset]);
                 }
             }
-            if (this.getSizeInPixels(dc) / this.divisions < this.minCellSizePixels) return [selectedPathRenderables, selectedTextRenderables, createdLabels];
+            if (this.getSizeInPixels(dc) / this.divisions < LatLonGraticuleGridTile.minCellSizePixels) return [selectedPathRenderables, selectedTextRenderables, createdLabels];
         }
 
         // Add tile grid elements
