@@ -99,8 +99,7 @@ function (GraticuleLayer,
 
     LatLonGraticuleLayer.prototype.getVisibleTiles = function(dc) {
         let tileList = [];
-        // let visibleSector = dc.globe.projectionLimits;
-        let visibleSector = Sector.FULL_SPHERE;
+        let visibleSector = dc.globe.projectionLimits || Sector.FULL_SPHERE;
         if (visibleSector) {
             let gridRectangle = this.getGridRectangleForSector(visibleSector);
             for (let row = gridRectangle.y; row <= gridRectangle.y + gridRectangle.height; row++) {
