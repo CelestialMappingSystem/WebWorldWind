@@ -138,8 +138,14 @@ function (GraticuleGridTile,
             this.createSubTiles();
         }
         for (let gt of this.subTiles) {
-            if (gt.isInView(dc)) gt.selectRenderables(dc);
-            else gt.clearRenderables();
+            if (gt.isInView(dc)) {
+                let [subPathRenderables, subTextRenderables, subCreatedLabels] = gt.selectRenderables(dc);
+                selectedPathRenderables = selectedPathRenderables.concat(subPathRenderables);
+                selectedTextRenderables = selectedTextRenderables.concat(subTextRenderables);
+                createdLabels = createdLabels.concat(subCreatedLabels);
+            } else {
+                gt.clearRenderables();
+            }
         }
 
         return [selectedPathRenderables, selectedTextRenderables, createdLabels];
